@@ -80,6 +80,22 @@ describe('on', () => {
     expect(spy).toHaveBeenCalled()
   })
 
+  test('does not crash on broadcast payload with ids and no data', () => {
+    const spy = vi.fn()
+    channel.on('broadcast', { event: 'telemetry' }, spy)
+
+    const payload = {
+      event: 'telemetry',
+      ts: 1730000000,
+      ids: [{ id: '18FECA00' }],
+    }
+
+    expect(() =>
+      channel._trigger('broadcast', payload, defaultRef)
+    ).not.toThrow()
+    expect(spy).toHaveBeenCalledWith(payload, defaultRef)
+  })
+
   test('other event callbacks are ignored', () => {
     const spy = vi.fn()
     const ignoredSpy = vi.fn()

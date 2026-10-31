@@ -712,7 +712,13 @@ export default class RealtimeChannel {
           }
         })
         .map((bind) => {
-          if (typeof handledPayload === 'object' && 'ids' in handledPayload) {
+          if (
+            typeof handledPayload === 'object' &&
+            handledPayload !== null &&
+            'ids' in handledPayload &&
+            typeof handledPayload.data === 'object' &&
+            handledPayload.data !== null
+          ) {
             const postgresChanges = handledPayload.data
             const { schema, table, commit_timestamp, type, errors } =
               postgresChanges
